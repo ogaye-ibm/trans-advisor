@@ -1,0 +1,19 @@
+ROKS
+oc create route reencrypt image-registry --service=image-registry -n openshift-image-registry
+oc patch route image-registry -n openshift-image-registry --type='json' -p='[{"op": "add", "path": "/metadata/annotations/haproxy.router.openshift.io~1balance", "value":"source"}]'
+export INTERNAL_IMAGE_REGISTRY=image-registry.openshift-image-registry.svc:5000
+export IMAGE_REGISTRY=$(oc get route image-registry -n openshift-image-registry -o jsonpath="{.spec.host}")
+
+docker login -u $(oc whoami) -p $(oc whoami -t) $IMAGE_REGISTRY
+podman login -u $(oc whoami) -p $(oc whoami -t) $IMAGE_REGISTRY
+
+===
+
+podman login -u $(oc whoami) -p $(oc whoami -t) image-registry.openshift-image-registry.svc:5000
+podman push image-registry.openshift-image-registry.svc:5000/<OCP_PROJECT>/<IMAGE_NAME>:latest
+
+docker tag plantsbywebsphere8:latest $IMAGE_REGISTRY/plantsbywebsphere8/plantsbywebsphere8:latest
+
+docker push  $IMAGE_REGISTRY/plantsbywebsphere8/plantsbywebsphere8:latest
+
+oc get service plantsbywebsphere8 -o=jsonpath='{.spec.ports[0].nodePort}'

@@ -1,0 +1,78 @@
+FIRST PART: COLLECTION
+
+
+STEP 1: Clone the CP4A TA demo git repo
+  git clone https://github.ibm.com/cpat/cp4a-ta-pbw.git
+  or
+  git clone git@github.ibm.com:cpat/cp4a-ta-pbw.git
+
+STEP 2: build the image (t-WAS + legacy Java EE apps)
+  cd CreatePreConfiguredtWASContainer
+  docker build -t twas-plantsbywebsphere .
+  sanity check: 
+  docker images | grep websphere
+
+STEP 3: Start a container
+docker run -d -p 9080:9080 -p 9443:9443 -p 9060:9060 -p 9043:9043 -v "$(pwd)":/data --name twas-plantsbywebsphere twas-plantsbywebsphere:latest  
+
+Check on WAS
+docker logs -f twas-plantsbywebsphere
+docker stop twas-plantsbywebsphere (if you see cert issue in the log, restart)
+docker start twas-plantsbywebsphere
+docker logs -f twas-plantsbywebsphere
+
+STEP 4: Log into console, load the PBW
+https://localhost:9043/ibm/console
+username: wsadmin password: passw0rd
+http://localhost:9080/PlantsByWebSphere
+
+STEP 5: COLLECTION
+docker exec -it twas-plantsbywebsphere bash
+
+Make sure you have a collector
+Mount or load manually a collector:
+cd CreatePreConfiguredtWASContainer
+docker cp  COLLECTOR_NAME.tgz twas-plantsbywebsphere:/demo
+Example:
+docker cp transformationadvisor-Linux_Ingram_Workspace_1_Ingram_Collection_1.tgz twas-plantsbywebsphere:/demo
+tar xvf COLLECTOR_NAME.tgz
+For example tar xvf transformationadvisor-Linux_Ingram_Workspace_1_Ingram_Collection_1.tgz
+
+cd /demo/COLLECTOR_EXTRACTED_FOLDER_NAME
+For example
+cd /demo/transformationadvisor-2.1.1
+TODO: check on the relevancy of customCmd.properties:
+   COPY customCmd.properties /demo/transformationadvisor-2.1.1/conf/
+Run a collection
+==============
+./bin/transformationadvisor -w /opt/IBM/WebSphere/AppServer -p AppSrv01 wsadmin passw0rd
+==============
+
+$ ls -la AppSrv01.zip
+
+Copy AppSrv01.zip to your current working directory:
+docker cp twas-plantsbywebsphere:/demo/transformationadvisor-2.1.1/AppSrv01.zip .
+
+
+SECOND PART: TA ANALYIS
+
+THIRD PART: MIGRATION
+
+
+
+
+LINKS AND REFS
+==============
+Full App Modernization and TA (and futures) deck that you can use (please remove any IBM Confidential content before sharing with clients): 
+https://ibm.box.com/v/AppModernizationAndTA
+TA Local download site: 
+http://ibm.biz/cloudta
+Local TA install: https://www.ibm.com/cloud/architecture/tutorials/install-ibm-transformation-advisor-local?task=1
+NON-CONFIDENTIAL Data Collection zips for use with customers and demos: 
+https://ibm.box.com/v/DataCollections
+Liberty's Java EE feature compatibility - 
+https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_prog_model_supported_combos.html
+
+
+
+

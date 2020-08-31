@@ -1,0 +1,21 @@
+
+APP MOD WITH Transformation Advisor (TA) WALK THRU 
+AGENDA
+
+  1. INTRO TO THE COLLECTOR
+  2. RUN t-WAS (FROM DOCKER IF NO WAS AVAILABLE)
+  3. DATA COLLECTION FROM t-WAS 
+  4. LOAD AND ANALYSE DATA
+  5. MIGRATE/DEPLOY TO LIBERTY/OCP (via Tekton pipeline)
+========================================
+
+APP MOD WITH TA, DEVELOPER'S STEPS:
+    1. The developer downloads a custom data collector from TA.
+    2. The developer runs the data collector on the traditional WebSphere Application Server host.
+    3. Data collector analysis is uploaded (automatically or manually) to TA.
+    4. The developer reviews recommendations in TA and creates a migration bundle.
+    5. The developer downloads the migration bundle (or push it to a git repo).
+    6. The developer either: 
+        option 1: uses Docker to build an image and upload it to a registry (e.g.; IBM icr).
+                  then uses a generated Helm chart to deploy the modernized app as a containerized Liberty app on OCP
+        option 2: or use an OCP pipeline (tekton, jenkins) to pull from the git repo and deploy to OCP 

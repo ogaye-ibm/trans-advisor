@@ -1,0 +1,45 @@
+A template for a one hour client TA demo, PBW on t-WAS to PBW on Liberty/OCP
+
+BEFORE THE SESSION START:
+0. If your plan to send artifacr to git, have a repo and a git token ready
+1. Set up your docker twas-plantsbywebshphere up and running with a working collector
+2. have your comand "docker exec -it twas-plantsbywebsphere bash" ready/handy
+3. Tab 1 of your browser: display console, application page, ready to show the apps running on t-WAS
+    https://localhost:9043/ibm/console  username: wsadmin password: passw0rd
+4. Tab 2 of your browser: display 
+    http://localhost:9080/PlantsByWebSphere
+Tab 3 of your browser: OCP Developer Topology view with a sample of liberty-pbw running
+5. Have an IDE open. Pre demo modernization project can be displayed here
+
+DEMO TIME:
+0. Agenda
+1. Set the context (2 to 5 mn)
+   a) apps runing on t-WAS docker container
+   b) show app running in OCP: goal is to show step-by-step how to get from a) to b)
+2. TA UI, describe the API and the process
+   2.1 Optionally, you can surf thru the step decribed in "APP MOD WITH TA, DEVELOPER'S STEPS"
+   2.2 The collector, how to download a collector, Workspace and Collection
+3. Exec into docker container
+   3.1 ls -l to show the current directory and the WAS install
+   3.2 run a collection
+   3.3 show the zip create 
+4. Data upload
+   4.1 If necessary explain automatic upload vs. manual upload
+5. Explain TA Anaylsis and reporting
+   5.1 main page
+   5.2 all 3 reports
+   5.3 artifacts genrated, all options (appsody, operators)
+   5.4 upload the required binaries
+   5.3 download bundle vs sending to git repo
+6. PWS modernization Option 1: Git repo and tkn pipeline
+   6.1 push artifact to git
+   6.2 clone or just navigate to git (browser) and explain the artifact
+   6.3 back to your IDE with pre-demo code and show customization added to TA artifact
+   6.4 Optional: run the code locally 
+         docker build -t liberty-pbw .
+         docker run -d -p 9080:9080 --name liberty-pbw liberty-pbw:latest       
+         http://localhost:9080/PlantsByWebSphere
+   6.4: optional: run your pipeline to show OCP deployment
+
+
+
